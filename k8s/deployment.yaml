@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greenhome-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: greenhome-backend
+  template:
+    metadata:
+      labels:
+        app: greenhome-backend
+    spec:
+      containers:
+      - name: backend
+        image: greenhome_backend:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greenhome-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: greenhome-frontend
+  template:
+    metadata:
+      labels:
+        app: greenhome-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: greenhome_frontend:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: ""
+        - name: MYSQL_ALLOW_EMPTY_PASSWORD
+          value: "yes"
+        - name: MYSQL_DATABASE
+          value: "greenhome"
